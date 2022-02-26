@@ -1,8 +1,3 @@
-
-
-
-
-
 import tkinter as tk
 import random
 import matplotlib.backends.backend_tkagg
