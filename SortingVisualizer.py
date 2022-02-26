@@ -1,7 +1,9 @@
-i
 
 
-mport tkinter as tk
+
+
+
+import tkinter as tk
 import random
 import matplotlib.backends.backend_tkagg
 import matplotlib
