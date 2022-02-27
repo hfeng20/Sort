@@ -134,7 +134,7 @@ class Sort:
                 for x in range(index, i):
                     self.GUIArray[x].x += 1
                     gui.removeRectangle(x)
-                    gui.insertRectangle(self.GUIArray[x],, "green")
+                    gui.insertRectangle(self.GUIArray[x], "green")
                 self.positionRectangle(gui, index, self.GUIArray[i], "green")
                 gui.canvas.draw()
             self.inAction = False
