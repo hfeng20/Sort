@@ -131,15 +131,17 @@ class Sort:
                         break
                 gui.removeRectangle(i)
                 self.GUIArray[i].x = index
-                for x in range(index, i):
+                self.positionRectangle(gui, index, self.GUIArray[i], "green")
+                for x in range(index + 1, i + 1):
                     self.GUIArray[x].x += 1
                     gui.removeRectangle(x)
-                    gui.insertRectangle(self.GUIArray[x], "green")
-                self.positionRectangle(gui, index, self.GUIArray[i], "green")
+                    gui.insertRectangle(self.GUIArray[x], x, "green")
                 gui.canvas.draw()
+                gui.root.update()
             self.inAction = False
         else:
             return
+        gui.showShuffle()
 
     def SelectionSort(self, gui):
         if not self.inAction:
@@ -243,7 +245,7 @@ class GUIRectangle:
         self.width = 1
 
 
-array = Sort(10)
+array = Sort(20)
 
 GUI = GUI()
 tk.mainloop()
