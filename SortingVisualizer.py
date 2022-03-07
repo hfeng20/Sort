@@ -9,6 +9,7 @@ from matplotlib.backend_bases import key_press_handler
 from matplotlib import pyplot as plt, animation
 import numpy as np
 import time
+import copy
 class GUI:
     def __init__(self):
         plt.rcParams["figure.figsize"] = [7.00, 3.50]
@@ -44,6 +45,8 @@ class GUI:
 
         self.insertionSortButton = tk.Button(master=self.root, text="Insertion Sort", command = lambda:array.InsertionSort(self))
 
+        self.mergeSortButton = tk.Button(master=self.root, text="Merge Sort", command = lambda:array.MergeSort(array.GUIArray, self, False))
+
         self.toolbar.pack(side=tk.BOTTOM, fill=tk.X)
         self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
         self.lines = []
@@ -53,12 +56,14 @@ class GUI:
         self.bubbleSortButton.pack_forget()
         self.selectionSortButton.pack_forget()
         self.insertionSortButton.pack_forget()
+        self.mergeSortButton.pack_forget()
 
     def showSorts(self):
         self.shuffleButton.pack_forget()
         self.bubbleSortButton.pack(side=tk.BOTTOM)
         self.selectionSortButton.pack(side = tk.BOTTOM)
         self.insertionSortButton.pack(side = tk.BOTTOM)
+        self.mergeSortButton.pack(side=tk.BOTTOM)
 
 
     def graphRectangle(self, rect, col):
@@ -119,6 +124,62 @@ class Sort:
         self.array.insert(index, self.array.pop(self.array.index(rect.height)))
         self.GUIArray.insert(index, self.GUIArray.pop(self.GUIArray.index(rect)))
         gui.insertRectangle(rect, index, col)
+    
+    def MergeSort(self, arr, gui, recursiveCall):
+        if not self.inAction or recursiveCall:
+            self.inAction = True
+            if len(arr) > 1:
+                mid = len(arr)//2
+                L = arr[:mid]
+                R = arr[mid:]
+                # for r in L:
+                #     print(r.height)
+                # print("")
+                # for r in R:
+                #     print(r.height)
+                self.MergeSort(L, gui, True)
+                self.MergeSort(R, gui, True)
+
+                leftIndex = self.GUIArray.index(L[0])
+                print(leftIndex)
+                sortedChunk = self.merge(L,R)
+                test = []
+                for r in sortedChunk:
+                    test.append(r.height)
+                print(test)
+
+                for rectangle in sortedChunk:
+                    self.GUIArray[leftIndex] = rectangle
+                    gui.removeRectangle(leftIndex)
+                    gui.insertRectangle(rectangle, leftIndex, "blue")
+                    leftIndex += 1
+                test = []
+                for r in self.GUIArray:
+                    test.append(r.height)
+                print(test)
+                print("")
+            self.inAction = False
+        if not recursiveCall:
+            # gui.showShuffle()
+            return
+
+    def merge(self, arr1, arr2):
+        sortedGUIArray = []
+        i = j = 0
+        while(i < len(arr1) and j < len(arr2)):
+            if(arr1[i].height < arr2[j].height):
+                sortedGUIArray.append(arr1[i])
+                i += 1
+            else:
+                sortedGUIArray.append(arr2[j])
+                j += 1
+        while(i < len(arr1)):
+            sortedGUIArray.append(arr1[i])
+            i += 1
+        while(j < len(arr2)):
+            sortedGUIArray.append(arr2[j])
+            j += 1
+        return sortedGUIArray
 
     def InsertionSort(self, gui):
         if not self.inAction:
@@ -245,7 +306,7 @@ class GUIRectangle:
         self.width = 1
 
 
-array = Sort(20)
+array = Sort(4)
 
 GUI = GUI()
 tk.mainloop()
